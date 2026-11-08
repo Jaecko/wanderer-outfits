@@ -1,0 +1,14 @@
+<Bindings>
+	<Binding name="WANDEREROUTFITS_TOGGLE" header="WANDEREROUTFITS">
+		WandererOutfits_Toggle()
+	</Binding>
+	<Binding name="WANDEREROUTFITS_POLE">
+		WandererOutfits_Pole()
+	</Binding>
+	<Binding name="WANDEREROUTFITS_CHOOSE">
+		WandererOutfits_Choose()
+	</Binding>
+	<Binding name="WANDEREROUTFITS_UNDO">
+		WandererOutfits_Undo()
+	</Binding>
+</Bindings>

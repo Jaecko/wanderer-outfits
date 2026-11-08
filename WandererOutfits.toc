@@ -1,0 +1,29 @@
+## Interface: 16001
+## Title: Wanderer Outfits
+## Notes: Outfits worn in one click, or by themselves at the right moment: your riding trinket on a mount, your fishing hat with the pole.
+## Notes-frFR: Des tenues mises en un clic, ou d'elles-mêmes au bon moment : votre bijou d'équitation en monture, votre chapeau de pêche avec la canne.
+## Notes-deDE: Outfits mit einem Klick angelegt oder von selbst im richtigen Moment: dein Reitschmuck auf dem Reittier, dein Anglerhut mit der Rute.
+## Notes-esES: Conjuntos puestos en un clic, o solos en el momento justo: tu abalorio de equitación en montura, tu sombrero de pesca con la caña.
+## Notes-esMX: Conjuntos puestos en un clic, o solos en el momento justo: tu abalorio de equitación en montura, tu sombrero de pesca con la caña.
+## Notes-itIT: Completi indossati con un clic, o da soli al momento giusto: il tuo monile da equitazione in sella, il tuo cappello da pesca con la canna.
+## Notes-ptBR: Trajes vestidos com um clique, ou sozinhos na hora certa: seu berloque de montaria na montaria, seu chapéu de pesca com a vara.
+## Notes-ruRU: Комплекты, надеваемые одним щелчком или сами в нужный момент: аксессуар для езды верхом, рыбацкая шляпа с удочкой.
+## Notes-koKR: 클릭 한 번에, 또는 알맞은 순간에 저절로 입는 옷차림: 탈것에는 승마용 장신구, 낚싯대와 함께 낚시 모자.
+## Notes-zhCN: 一键穿上的套装，或在合适时机自动穿上：骑乘时的骑术饰品，拿鱼竿时的钓鱼帽。
+## Notes-zhTW: 一鍵穿上的套裝，或在合適時機自動穿上：騎乘時的騎術飾品，拿魚竿時的釣魚帽。
+## Category: Inventory
+## Version: 1.2.0
+## Author: Jaekco
+## IconTexture: Interface\Icons\INV_Chest_Cloth_17
+## RequiredDeps: Wanderer
+## SavedVariablesPerCharacter: WandererOutfitsDB
+## X-License: GPL-3.0-or-later
+## X-Curse-Project-ID: 1787047
+## X-Website: https://wanderer-addon.com
+
+Locales.lua
+Locales\[TextLocale].lua
+Sets.lua
+Situations.lua
+Presence.lua
+Window.lua
