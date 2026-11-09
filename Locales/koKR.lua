@@ -111,4 +111,5 @@ ns.LOCALES.koKR = {
 	STILL_WORN_CHOOSE = "클릭: 옷차림 고르기",
 	IN_OUTFITS = "내 옷차림: %s",
 	RENAME_TAKEN = "복장: 다른 복장의 이름이 이미 \"%s\"입니다. 다른 이름을 고르세요.",
+	PAD_NAME = "착용 세트 %d",
 }

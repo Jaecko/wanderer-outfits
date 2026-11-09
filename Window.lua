@@ -537,7 +537,15 @@ local function Create()
 	window.where:SetJustifyV("TOP")
 	local save = Skin.Button(window, L.SAVE, function()
 		-- (a name already used: replacing that outfit is asked first)
-		Skin.AskText(L.NAME_PROMPT, "", function(name) ns.AskSave(name) end, 30)
+		-- (with a controller nothing is typed: a free name already written, kept or changed)
+		local name = ""
+		if U.UsingPad and U.UsingPad() then
+			local used, number = {}, #ns.Sets() + 1
+			for _, entry in ipairs(ns.Sets()) do used[entry.name] = true end
+			while used[L.PAD_NAME:format(number)] do number = number + 1 end
+			name = L.PAD_NAME:format(number)
+		end
+		Skin.AskText(L.NAME_PROMPT, name, function(typed) ns.AskSave(typed) end, 30)
 	end, "main")
 	save:SetPoint("BOTTOMLEFT", window, "BOTTOMLEFT", margin, margin)
 	Skin.Tooltip(save, L.SAVE_DESC)
@@ -653,7 +661,7 @@ function ns.Init()
 		title = L.ADDON,
 		news = L.NEWS_LINES,
 		-- (the situations: on, but nothing happens until an outfit is tied to one)
-		defaults = { enabled = true, situations = true, suggest = true, poleOnCast = false, weaponsOnMount = false },
+		defaults = { enabled = true, situations = true, suggest = true, poleOnCast = true, weaponsOnMount = true },
 		launcher = { label = L.TITLE, open = function() ns.Toggle() end },
 		refresh = function() ns.Changed() end,
 		-- (as every page: the switch, its window, what is done for you)

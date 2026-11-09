@@ -111,4 +111,5 @@ ns.LOCALES.zhTW = {
 	STILL_WORN_CHOOSE = "點擊：選擇套裝",
 	IN_OUTFITS = "在你的套裝中：%s",
 	RENAME_TAKEN = "套裝：已有另一套裝名為「%s」，請換一個名字。",
+	PAD_NAME = "套裝 %d",
 }

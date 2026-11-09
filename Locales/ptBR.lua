@@ -111,4 +111,5 @@ ns.LOCALES.ptBR = {
 	STILL_WORN_CHOOSE = "Clique: escolher um traje",
 	IN_OUTFITS = "Nos seus trajes: %s",
 	RENAME_TAKEN = "Trajes: outro traje já se chama \"%s\"; escolha outro nome.",
+	PAD_NAME = "Traje %d",
 }

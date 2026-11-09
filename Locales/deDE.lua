@@ -111,4 +111,5 @@ ns.LOCALES.deDE = {
 	STILL_WORN_CHOOSE = "Klick: ein Outfit wählen",
 	IN_OUTFITS = "In deinen Outfits: %s",
 	RENAME_TAKEN = "Outfits: Ein anderes Outfit heißt schon „%s“; wähle einen anderen Namen.",
+	PAD_NAME = "Outfit %d",
 }

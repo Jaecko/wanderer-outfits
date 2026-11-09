@@ -111,4 +111,5 @@ ns.LOCALES.esES = {
 	STILL_WORN_CHOOSE = "Clic: elegir un conjunto",
 	IN_OUTFITS = "En tus conjuntos: %s",
 	RENAME_TAKEN = "Atuendos: otro atuendo ya se llama «%s»; elige otro nombre.",
+	PAD_NAME = "Atuendo %d",
 }

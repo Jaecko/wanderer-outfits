@@ -111,4 +111,5 @@ ns.LOCALES.frFR = {
 	STILL_WORN_CHOOSE = "Clic : choisir une tenue",
 	IN_OUTFITS = "Dans vos tenues : %s",
 	RENAME_TAKEN = "Tenues : une autre tenue s'appelle déjà « %s » ; choisissez un autre nom.",
+	PAD_NAME = "Tenue %d",
 }

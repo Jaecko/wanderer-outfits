@@ -115,6 +115,7 @@ local LOCALES = {
 		STILL_WORN_CHOOSE = "Click: choose an outfit",
 		IN_OUTFITS = "In your outfits: %s",
 		RENAME_TAKEN = "Outfits: another outfit is already called \"%s\"; choose another name.",
+		PAD_NAME = "Outfit %d",
 	},
 }
 ns.LOCALES = LOCALES

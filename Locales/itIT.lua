@@ -111,4 +111,5 @@ ns.LOCALES.itIT = {
 	STILL_WORN_CHOOSE = "Clic: scegli un completo",
 	IN_OUTFITS = "Nei tuoi completi: %s",
 	RENAME_TAKEN = "Completi: un altro completo si chiama già «%s»; scegli un altro nome.",
+	PAD_NAME = "Completo %d",
 }
