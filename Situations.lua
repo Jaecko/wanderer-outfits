@@ -219,7 +219,7 @@ local function Evaluate()
 		if not ns.Same(worn[slot], link) then want[slot] = link end
 		state.applied[slot] = link
 	end
-	state.name, state.kind = name, kind
+	state.name = name
 	ns.Put(want, false, name and ("situation:" .. name) or "situation")
 	-- The first time an outfit goes on by itself: said once, so you know it works and why.
 	if entry then

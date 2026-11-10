@@ -126,7 +126,8 @@ function ns.MakeFromPiece(id)
 	local function Wait()
 		if ns.Same(ns.Worn()[slot], link) then return Make() end
 		waited = waited + 0.5
-		if waited < WEAR_WAIT then C_Timer.After(0.5, Wait) end
+		-- (the piece still on its way, hands busy with a cast: waited for, never left on without an outfit)
+		if waited < WEAR_WAIT or ns.Dressing() then C_Timer.After(0.5, Wait) end
 	end
 	C_Timer.After(0.5, Wait)
 end

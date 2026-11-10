@@ -109,8 +109,13 @@ function ns.Sets()
 			if name then list[#list + 1] = { id = id, name = name, icon = icon, equipped = Clean(equipped) and true or false } end
 		end
 		-- (one that leaves pieces aside: worn when every piece it takes is)
+		-- (the bags read once for all of them)
+		local index
 		for _, entry in ipairs(list) do
-			if Left(entry.name) then entry.equipped = ns.AllWorn(entry) end
+			if Left(entry.name) then
+				index = index or ns.BagIndex()
+				entry.equipped = ns.AllWorn(entry, index)
+			end
 		end
 		return list
 	end
@@ -247,8 +252,8 @@ function ns.Summary(entry, index)
 end
 
 -- Every piece it takes worn now.
-function ns.AllWorn(entry)
-	local summary = ns.Summary(entry)
+function ns.AllWorn(entry, index)
+	local summary = ns.Summary(entry, index)
 	if summary.total == 0 then return false end
 	for _, piece in ipairs(summary.pieces) do
 		if not piece.left and piece.state ~= "worn" then return false end
@@ -847,7 +852,6 @@ local function Watch()
 	watch.x, watch.y, watch.map = Here()
 	if not ticker and C_Timer and C_Timer.NewTicker then ticker = C_Timer.NewTicker(1, function() ns.TickPole() end) end
 end
-ns.WatchPole = Watch
 
 -- Over (why: a word for /woutfits debug).
 local function Over(why)

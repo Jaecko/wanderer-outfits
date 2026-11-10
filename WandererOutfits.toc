@@ -12,7 +12,7 @@
 ## Notes-zhCN: 一键穿上的套装，或在合适时机自动穿上：骑乘时的骑术饰品，拿鱼竿时的钓鱼帽。
 ## Notes-zhTW: 一鍵穿上的套裝，或在合適時機自動穿上：騎乘時的騎術飾品，拿魚竿時的釣魚帽。
 ## Category: Inventory
-## Version: 1.2.2
+## Version: 1.2.3
 ## Author: Jaekco
 ## IconTexture: Interface\Icons\INV_Chest_Cloth_17
 ## RequiredDeps: Wanderer
