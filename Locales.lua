@@ -116,6 +116,11 @@ local LOCALES = {
 		IN_OUTFITS = "In your outfits: %s",
 		RENAME_TAKEN = "Outfits: another outfit is already called \"%s\"; choose another name.",
 		PAD_NAME = "Outfit %d",
+		PAD_CARD = "Its card",
+		ROW_TIP_PAD = "Bottom button: wear it. Top button: its card.",
+		HELP_TIP_PAD = "\"For a moment\": an outfit that goes on by itself (a mount, fishing, a zone, a dungeon, a town); what it changed comes back after.\nAn outfit takes all your pieces or only some: in its card, the bottom button on a piece leaves it aside. Its \"When\" changes its moment.\nBottom button on an outfit: wear it. Top button: its card.\nThe pole: in hand with your weapons remembered, then back.",
+		CARD_RENAME_TIP_PAD = "Its name, written here with a keyboard: Enter keeps it, Escape lets it be.",
+		POLE_ON_CAST_DESC_PAD = "With the mouse: a double right click on the water (Wanderer's double click), at a place you have already fished from, brings the pole of your bags in hand and casts the line. Your weapons come back once you are done.",
 	},
 }
 ns.LOCALES = LOCALES

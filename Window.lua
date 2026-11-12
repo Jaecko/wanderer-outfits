@@ -368,13 +368,16 @@ function ns.FillCard()
 			ns.FillCard()
 		end },
 		{ sign = { glyph = "reload" }, label = L.CARD_AGAIN, tip = L.ACT_UPDATE, run = function() ns.AskSave(entry.name) end },
-		{ sign = { file = RENAME_ICON }, label = L.CARD_RENAME_TILE, tip = L.CARD_RENAME_TIP, on = card.mode == "rename", stay = true, run = function()
+		{ sign = { file = RENAME_ICON }, label = L.CARD_RENAME_TILE, tip = (U.UsingPad and U.UsingPad()) and L.CARD_RENAME_TIP_PAD or L.CARD_RENAME_TIP, on = card.mode == "rename", stay = true, run = function()
 			card.mode = card.mode ~= "rename" and "rename" or nil
 			ns.FillCard()
 			if card.mode == "rename" then
 				renameBox.input:SetText(entry.name)
-				renameBox.input:SetFocus()
-				if renameBox.input.HighlightText then renameBox.input:HighlightText() end
+				-- (a name is written with a keyboard: the controller keeps its own navigation)
+				if not (U.UsingPad and U.UsingPad()) then
+					renameBox.input:SetFocus()
+					if renameBox.input.HighlightText then renameBox.input:HighlightText() end
+				end
 			end
 		end },
 		{ sign = { glyph = "grid" }, label = L.CARD_ICON, tip = L.CARD_ICON_TIP, on = card.mode == "icon", stay = true, run = function()
@@ -455,7 +458,7 @@ local function Draw()
 		if set then
 			local summary = ns.Summary(set, bagIndex)
 			row:Fill({ id = set.id, name = set.name, icon = set.icon, equipped = set.equipped, color = set.equipped and Skin.COLORS.gold or nil,
-				tip = { set.name, L.ROW_TIP } }, set.equipped, {}, nil, nil, not set.equipped and L.ACT_WEAR or nil, function() ns.WearSet(set.id) end)
+				tip = { set.name, (U.UsingPad and U.UsingPad()) and L.ROW_TIP_PAD or L.ROW_TIP } }, set.equipped, {}, nil, nil, not set.equipped and L.ACT_WEAR or nil, function() ns.WearSet(set.id) end)
 			Decorate(row)
 			-- Two lines: its name, then what it is now.
 			row.name:ClearAllPoints()
@@ -472,6 +475,8 @@ local function Draw()
 			Color(row.state, role)
 			row.state:Show()
 			row.number:SetText(offset + index <= 9 and tostring(offset + index) or "")
+			-- (no number keys under the controller)
+			row.number:SetShown(not (U and U.UsingPad and U.UsingPad()))
 			row.worn:Set(set.equipped and L.CHIP_WORN or nil, "gold")
 		else
 			row:Fill(nil)
@@ -516,6 +521,7 @@ local function Create()
 	local _, title, margin = Skin.Header(window, "Wanderer", L.TITLE, { settings = "ext:outfits" })
 	list = Skin.Table(window, {
 		width = WIDTH - margin * 2, rows = ROWS, rowHeight = ROW_HEIGHT, action = 70, nameTitle = L.COL_OUTFIT, columns = {},
+		padRight = true, padRightWord = L.PAD_CARD, -- (its right click: the outfit's card)
 		onClick = function(entry, mouse)
 			if mouse == "RightButton" then
 				for _, row in ipairs(list.rows) do
@@ -558,7 +564,9 @@ local function Create()
 	-- (the last change undone, at the far right: shown only when there is one)
 	window.undo = Skin.GlyphButton(window, "undo", 18, L.UNDO_DESC, function() ns.Undo() end)
 	window.undo:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", -margin, margin + 4)
-	Skin.Help(window, L.HELP_TIP, "HEADING")
+	local help = Skin.Help(window, L.HELP_TIP, "HEADING")
+	-- (with a controller: its own words, its buttons instead of the mouse's)
+	if help then help:HookScript("OnEnter", function(self) if U.UsingPad and U.UsingPad() then Skin.ShowTip(self, L.HELP_TIP_PAD, "ANCHOR_BOTTOM") end end) end
 	window:SetSize(WIDTH, margin * 2 + 30 + 12 + list:GetHeight() + 6 + 28 + 12 + 36)
 	window:SetScript("OnKeyDown", OnKey)
 	window:SetScript("OnEvent", function(_, event) Keys(event == "PLAYER_REGEN_ENABLED") end)
@@ -645,10 +653,11 @@ BINDING_NAME_WANDEREROUTFITS_TOGGLE = L.TITLE
 BINDING_NAME_WANDEREROUTFITS_POLE = L.BINDING_POLE
 BINDING_NAME_WANDEREROUTFITS_CHOOSE = L.BINDING_CHOOSE
 BINDING_NAME_WANDEREROUTFITS_UNDO = L.UNDO
-function WandererOutfits_Toggle() ns.Toggle() end
-function WandererOutfits_Pole() if On() then ns.TogglePole() else SayOff() end end
-function WandererOutfits_Choose() ns.Choose() end
-function WandererOutfits_Undo() if On() then ns.Undo() else SayOff() end end
+-- (nothing before Init has passed Wanderer's check)
+function WandererOutfits_Toggle() if ns.ready then ns.Toggle() end end
+function WandererOutfits_Pole() if not ns.ready then return end if On() then ns.TogglePole() else SayOff() end end
+function WandererOutfits_Choose() if ns.ready then ns.Choose() end end
+function WandererOutfits_Undo() if not ns.ready then return end if On() then ns.Undo() else SayOff() end end
 
 function ns.Init()
 	if not (W and W.RegisterExtension) then return end
@@ -683,6 +692,7 @@ function ns.Init()
 			end
 			o.Under(o.Checkbox("outfits", "suggest", L.SUGGEST, L.SUGGEST_DESC), enabled, on)
 			local onCast = o.Checkbox("outfits", "poleOnCast", L.POLE_ON_CAST, L.POLE_ON_CAST_DESC)
+			if type(onCast) == "table" then onCast.descPad = L.POLE_ON_CAST_DESC_PAD end -- (the double click is the mouse's)
 			o.Under(Yield(onCast), enabled, on)
 			-- (it acts on Wanderer's fishing double click: greyed while that is off, saying so)
 			o.Needs(onCast, function()
@@ -724,9 +734,10 @@ function ns.Init()
 		if On() then ns.FillSwitcher() else switcher:Hide() end
 	end)
 	-- For Wanderer Bags: your outfits' pieces (never sold, their own section), those waiting in the bank.
-	WandererOutfits = { Pieces = function() return ns.PieceMap() end, BankPieces = function() return ns.BankPieces() end,
+	WandererOutfits = { Pieces = function() return ns.PieceMap() end, BankPieces = function() return On() and ns.BankPieces() or {} end,
 		Toggle = function() ns.Toggle() end, Choose = function() ns.Choose() end }
 	ns.TellBags()
+	ns.ready = true
 end
 
 if W and W.WhenLoaded then W.WhenLoaded(ADDON, ns.Init) elseif W and W.Print then W.Print(L.NEEDS_WANDERER) end

@@ -112,4 +112,9 @@ ns.LOCALES.itIT = {
 	IN_OUTFITS = "Nei tuoi completi: %s",
 	RENAME_TAKEN = "Completi: un altro completo si chiama già «%s»; scegli un altro nome.",
 	PAD_NAME = "Completo %d",
+	PAD_CARD = "La sua scheda",
+	ROW_TIP_PAD = "Pulsante in basso: indossalo. Pulsante in alto: la sua scheda.",
+	HELP_TIP_PAD = "«Per un momento»: un completo che si indossa da solo (una cavalcatura, la pesca, una zona, una spedizione, una città); ciò che ha cambiato torna dopo.\nUn completo prende tutti i tuoi pezzi o solo alcuni: nella sua scheda, il pulsante in basso su un pezzo lo lascia da parte. Il suo «Quando» cambia il suo momento.\nPulsante in basso su un completo: indossalo. Pulsante in alto: la sua scheda.\nLa canna: in mano, le tue armi ricordate, poi restituite.",
+	CARD_RENAME_TIP_PAD = "Il suo nome, scritto qui con una tastiera: Invio lo tiene, Esc lo lascia.",
+	POLE_ON_CAST_DESC_PAD = "Con il mouse: un doppio clic destro sull'acqua (il doppio clic di Wanderer), in un punto dove hai già pescato, ti mette in mano la canna delle tue borse e lancia la lenza. Le tue armi tornano quando hai finito.",
 }

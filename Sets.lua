@@ -80,7 +80,6 @@ local function Exact(a, b)
 	end
 	return true
 end
-ns.Exact = Exact
 
 -- The slots an outfit leaves aside (by its name): slot -> true.
 local function Left(name) return name and DB().left[name] or nil end
@@ -343,7 +342,6 @@ local function SayLeft(pieces)
 	if not parts[1] then return W.Print(L.MSG_NOT_ALL) end
 	W.Print(L.MSG_NOT_ALL_NAMED:format(table.concat(parts, "; ")))
 end
-ns.SayLeft = SayLeft
 
 -- An icon for an outfit: its chest's, else its main hand's, else its head's.
 local function IconOf(slots)
@@ -840,10 +838,8 @@ local function Fishing()
 	return U.IsFishingSpell(select(8, Safe(UnitChannelInfo, "player")))
 end
 
-local function Here()
-	local y, x, _, map = Safe(UnitPosition, "player")
-	return Clean(x), Clean(y), Clean(map)
-end
+-- (where you stand: Wanderer's own reading, x, y, the continent)
+local function Here() return U.Here() end
 
 -- Watched from now (where you stand, a line just seen): once a second until it is over.
 local ticker

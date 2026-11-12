@@ -112,4 +112,9 @@ ns.LOCALES.ptBR = {
 	IN_OUTFITS = "Nos seus trajes: %s",
 	RENAME_TAKEN = "Trajes: outro traje já se chama \"%s\"; escolha outro nome.",
 	PAD_NAME = "Traje %d",
+	PAD_CARD = "Sua ficha",
+	ROW_TIP_PAD = "Botão de baixo: vesti-lo. Botão de cima: a ficha dele.",
+	HELP_TIP_PAD = "\"Para um momento\": um traje que se veste sozinho (uma montaria, a pesca, uma zona, uma masmorra, uma cidade); o que mudou volta depois.\nUm traje pega todas as suas peças ou só algumas: na ficha dele, o botão de baixo numa peça a deixa de lado. O \"Quando\" dele muda o momento.\nBotão de baixo num traje: vesti-lo. Botão de cima: a ficha dele.\nA vara: na mão, suas armas lembradas, depois devolvidas.",
+	CARD_RENAME_TIP_PAD = "O nome dele, escrito aqui com um teclado: Enter guarda, Esc deixa como está.",
+	POLE_ON_CAST_DESC_PAD = "Com o mouse: um duplo clique direito na água (o duplo clique do Wanderer), em um lugar onde você já pescou, põe na mão a vara das suas bolsas e lança a linha. Suas armas voltam quando você termina.",
 }

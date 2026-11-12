@@ -112,4 +112,9 @@ ns.LOCALES.esES = {
 	IN_OUTFITS = "En tus conjuntos: %s",
 	RENAME_TAKEN = "Atuendos: otro atuendo ya se llama «%s»; elige otro nombre.",
 	PAD_NAME = "Atuendo %d",
+	PAD_CARD = "Su ficha",
+	ROW_TIP_PAD = "Botón inferior: ponértelo. Botón superior: su ficha.",
+	HELP_TIP_PAD = "«Para un momento»: un conjunto que se pone solo (una montura, la pesca, una zona, una mazmorra, una ciudad); lo que cambió vuelve después.\nUn conjunto toma todas tus piezas o solo algunas: en su ficha, el botón inferior en una pieza la deja aparte. Su «Cuándo» cambia su momento.\nBotón inferior en un conjunto: ponértelo. Botón superior: su ficha.\nLa caña: en la mano, tus armas recordadas, luego devueltas.",
+	CARD_RENAME_TIP_PAD = "Su nombre, escrito aquí con un teclado: Intro lo guarda, Escape lo deja.",
+	POLE_ON_CAST_DESC_PAD = "Con el ratón: un doble clic derecho sobre el agua (el doble clic de Wanderer), en un lugar donde ya hayas pescado, pone en tu mano la caña de tus bolsas y lanza el sedal. Tus armas vuelven cuando terminas.",
 }

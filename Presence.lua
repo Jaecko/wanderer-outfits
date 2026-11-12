@@ -27,7 +27,6 @@ local MOMENT_PIECES = {
 	[13209] = { kind = "zone", slot = 14 }, -- Seal of the Dawn
 	[19812] = { kind = "zone", slot = 14 }, -- Rune of the Dawn
 }
-ns.MOMENT_PIECES = MOMENT_PIECES -- (tests)
 local SCAN_DELAY = 3 -- seconds after the bags settle
 local WEAR_WAIT = 4 -- seconds a piece is waited for before the outfit is made
 

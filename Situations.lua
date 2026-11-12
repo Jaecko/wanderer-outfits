@@ -155,7 +155,7 @@ local function State()
 	state.applied = type(state.applied) == "table" and state.applied or {}
 	return state
 end
-ns.SituationState = State -- (tests)
+ns.SituationState = State
 
 -- A piece you changed yourself in a slot a situation dressed: yours, never given back.
 local function Respect()
@@ -187,8 +187,8 @@ local function Evaluate()
 	for _, other in ipairs(together) do name = name .. " + " .. other.name end
 	if name ~= state.skipped then state.skipped = nil end
 	if name == state.name then return end
-	-- Shift held as the moment comes: it passes (until it ends).
-	if name and IsShiftKeyDown and IsShiftKeyDown() then
+	-- Shift held as the moment comes (the controller's own Shift too): it passes (until it ends).
+	if name and U and U.IsSkipping and U.IsSkipping() then
 		state.skipped = name
 		return
 	end

@@ -112,4 +112,9 @@ ns.LOCALES.deDE = {
 	IN_OUTFITS = "In deinen Outfits: %s",
 	RENAME_TAKEN = "Outfits: Ein anderes Outfit heißt schon „%s“; wähle einen anderen Namen.",
 	PAD_NAME = "Outfit %d",
+	PAD_CARD = "Seine Karte",
+	ROW_TIP_PAD = "Unterer Knopf: anlegen. Oberer Knopf: seine Karte.",
+	HELP_TIP_PAD = "\"Für einen Moment\": ein Outfit, das sich von selbst anlegt (Reittier, Angeln, eine Zone, ein Dungeon, eine Stadt); was es geändert hat, kommt danach zurück.\nEin Outfit nimmt alle deine Teile oder nur einige: in seiner Karte lässt der untere Knopf auf einem Teil es beiseite. Sein \"Wann\" ändert seinen Moment.\nUnterer Knopf auf einem Outfit: anlegen. Oberer Knopf: seine Karte.\nDie Rute: in die Hand, deine Waffen gemerkt, dann zurück.",
+	CARD_RENAME_TIP_PAD = "Sein Name, hier mit einer Tastatur geschrieben: Enter behält ihn, Escape lässt ihn.",
+	POLE_ON_CAST_DESC_PAD = "Mit der Maus: Ein doppelter Rechtsklick aufs Wasser (Wanderers Doppelklick), an einem Ort, an dem du schon geangelt hast, nimmt die Angel aus deinen Taschen in die Hand und wirft die Schnur aus. Deine Waffen kommen zurück, wenn du fertig bist.",
 }

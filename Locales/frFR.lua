@@ -112,4 +112,9 @@ ns.LOCALES.frFR = {
 	IN_OUTFITS = "Dans vos tenues : %s",
 	RENAME_TAKEN = "Tenues : une autre tenue s'appelle déjà « %s » ; choisissez un autre nom.",
 	PAD_NAME = "Tenue %d",
+	PAD_CARD = "Sa fiche",
+	ROW_TIP_PAD = "Bouton du bas : la porter. Bouton du haut : sa fiche.",
+	HELP_TIP_PAD = "« Pour un moment » : une tenue qui se met d'elle-même (une monture, la pêche, une zone, un donjon, une ville) ; ce qu'elle a changé revient ensuite.\nUne tenue prend toutes vos pièces ou seulement certaines : dans sa fiche, le bouton du bas sur une pièce la laisse de côté. Son « Quand » change son moment.\nBouton du bas sur une tenue : la porter. Bouton du haut : sa fiche.\nLa canne : en main, vos armes retenues, puis rendues.",
+	CARD_RENAME_TIP_PAD = "Son nom, écrit ici avec un clavier : Entrée le garde, Échap le laisse.",
+	POLE_ON_CAST_DESC_PAD = "À la souris : un double clic droit sur l'eau (le double clic de Wanderer), à un endroit où vous avez déjà pêché, met en main la canne de vos sacs et lance la ligne. Vos armes reviennent quand vous avez fini.",
 }
