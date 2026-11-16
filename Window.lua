@@ -11,6 +11,11 @@ local L = ns.L
 local W = Wanderer
 local U = W and W.Util
 local Skin = W and W.Skin
+-- (the game's modified clicks on an item: Shift links it in the chat, Ctrl tries it on; true when done. An older
+-- Wanderer has no Util.ItemClick)
+local ItemClick = U and rawget(U, "ItemClick") or function(link)
+	if link and IsModifiedClick() and HandleModifiedItemClick then HandleModifiedItemClick(link) return true end
+end
 
 local WIDTH, ROWS, ROW_HEIGHT = 440, 5, 54
 local STRIP_SQUARE, STRIP_GAP, STRIP_PER_ROW = 22, 3, 10
@@ -38,19 +43,36 @@ local function Bags()
 end
 
 -- What you wear kept under a name: an outfit of that name already there is replaced only once you said yes.
-function ns.AskSave(name)
+-- onMade(entry): where its card opens once it is made (else beside its row in the window).
+function ns.AskSave(name, onMade)
 	name = type(name) == "string" and strtrim(name) or ""
 	if name == "" then return end
 	local function Save()
 		if not ns.SaveSet(name) then return end
 		Skin.Play("confirm")
 		-- (the game's manager may add a new one a moment later: its card opened once it is there)
-		ns.AwaitSet(name, function(entry) if entry then ns.ShowOutfit(entry.name) end end)
+		ns.AwaitSet(name, function(entry)
+			if not entry then return end
+			if onMade then onMade(entry) else ns.ShowOutfit(entry.name) end
+		end)
 	end
 	for _, set in ipairs(ns.Sets()) do
 		if set.name == name then return Skin.Ask(L.SAVE_REPLACE_ASK:format(name), Save) end
 	end
 	Save()
+end
+
+-- Its name asked first (a name already used: replacing that outfit is asked next). With a controller nothing is
+-- typed: a free name already written, kept or changed.
+function ns.AskSaveName(onMade)
+	local name = ""
+	if U.UsingPad and U.UsingPad() then
+		local used, number = {}, #ns.Sets() + 1
+		for _, entry in ipairs(ns.Sets()) do used[entry.name] = true end
+		while used[L.PAD_NAME:format(number)] do number = number + 1 end
+		name = L.PAD_NAME:format(number)
+	end
+	Skin.AskText(L.NAME_PROMPT, name, function(typed) ns.AskSave(typed, onMade) end, 30)
 end
 
 -- An outfit's card opened beside its row (the window opened first): just made, its pieces to choose, its moment.
@@ -146,13 +168,14 @@ local function MakeStrip()
 		square:SetPoint("TOPLEFT", strip, "TOPLEFT", column * (STRIP_SQUARE + STRIP_GAP), -line * (STRIP_SQUARE + STRIP_GAP))
 		square:EnableMouse(true)
 		square.bank = square:CreateTexture(nil, "OVERLAY")
-		square.bank:SetSize(10, 10)
+		square.bank:SetSize(14, 14)
 		square.bank:SetPoint("BOTTOMRIGHT", square, "BOTTOMRIGHT", 1, -1)
 		square.bank:SetTexture(BANKER)
 		square.slot = slot
 		Skin.ItemTooltip(square, function(self) return self.link or self.id end, "ANCHOR_BOTTOM")
-		-- (a click: this piece left aside by the outfit, or taken again)
+		-- (a click: this piece left aside by the outfit, or taken again; Shift or Ctrl: the game's own, never a change)
 		square:SetScript("OnMouseUp", function(self, button)
+			if button == "LeftButton" and ItemClick(self.link) then return end
 			if button ~= "LeftButton" or not (self.piece and card and card.entry) then return end
 			Skin.Play("click")
 			ns.ToggleLeft(card.entry, self.slot)
@@ -178,7 +201,7 @@ local function PaintStrip(summary)
 		else
 			square:Set(piece.id and U.ItemIcon(piece.id), piece.id and U.ItemQuality(piece.id))
 			-- (left aside: faint and grey, it is not part of it)
-			square:SetAlpha(piece.left and 0.25 or (piece.state == "bank" and 0.5 or 1))
+			square:SetAlpha(piece.left and 0.25 or 1)
 			if square.texture.SetDesaturated then square.texture:SetDesaturated(piece.left or piece.state == "missing") end
 			if not piece.left and piece.state == "bags" then square.edges.Color(gold[1], gold[2], gold[3], 0.9) end
 			if not piece.left and piece.state == "missing" then square.edges.Color(bad[1], bad[2], bad[3], 0.9) end
@@ -541,18 +564,7 @@ local function Create()
 	window.where:SetJustifyH("LEFT")
 	window.where:SetHeight(28)
 	window.where:SetJustifyV("TOP")
-	local save = Skin.Button(window, L.SAVE, function()
-		-- (a name already used: replacing that outfit is asked first)
-		-- (with a controller nothing is typed: a free name already written, kept or changed)
-		local name = ""
-		if U.UsingPad and U.UsingPad() then
-			local used, number = {}, #ns.Sets() + 1
-			for _, entry in ipairs(ns.Sets()) do used[entry.name] = true end
-			while used[L.PAD_NAME:format(number)] do number = number + 1 end
-			name = L.PAD_NAME:format(number)
-		end
-		Skin.AskText(L.NAME_PROMPT, name, function(typed) ns.AskSave(typed) end, 30)
-	end, "main")
+	local save = Skin.Button(window, L.SAVE, function() ns.AskSaveName() end, "main")
 	save:SetPoint("BOTTOMLEFT", window, "BOTTOMLEFT", margin, margin)
 	Skin.Tooltip(save, L.SAVE_DESC)
 	-- (a secondary action: a quiet button; the help in the heading, the foot left to the two buttons)
@@ -670,7 +682,8 @@ function ns.Init()
 		title = L.ADDON,
 		news = L.NEWS_LINES,
 		-- (the situations: on, but nothing happens until an outfit is tied to one)
-		defaults = { enabled = true, situations = true, suggest = true, poleOnCast = true, weaponsOnMount = true },
+		-- (the character sheet: Wanderer's, the game's a link away; off: the game's, as before)
+		defaults = { enabled = true, situations = true, suggest = true, poleOnCast = true, weaponsOnMount = true, sheet = true },
 		launcher = { label = L.TITLE, open = function() ns.Toggle() end },
 		refresh = function() ns.Changed() end,
 		-- (as every page: the switch, its window, what is done for you)
@@ -681,6 +694,8 @@ function ns.Init()
 				o.CloseSettings()
 				ns.Open()
 			end), enabled, on)
+			-- (the character key: Wanderer's sheet in place of the game's)
+			o.Under(o.Checkbox("outfits", "sheet", L.SHEET, L.SHEET_DESC, ns.Changed), enabled, on)
 			-- (an option whose job another addon does, ItemRack: greyed, with its name)
 			local function Yield(widget) return o.Yield(widget, "gearSwap") end
 			o.Header(L.SECTION_AUTOMATIONS)
@@ -727,6 +742,7 @@ function ns.Init()
 	ns.InitSets()
 	ns.InitSituations()
 	ns.InitPresence()
+	ns.InitSheet()
 	ns.OnChanged(Draw)
 	-- (Outfits turned off with the card at the mouse open: it goes, as the window does)
 	ns.OnChanged(function()

@@ -135,10 +135,11 @@ end
 ns.SLOTS = SLOTS
 
 -- Each slot's name, as the game says it (a piece without one: its own name).
-local SLOT_WORDS = { [1] = "HEADSLOT", [2] = "NECKSLOT", [3] = "SHOULDERSLOT", [4] = "SHIRTSLOT", [5] = "CHESTSLOT", [6] = "WAISTSLOT",
+local SLOT_WORDS = { [0] = "AMMOSLOT", [1] = "HEADSLOT", [2] = "NECKSLOT", [3] = "SHOULDERSLOT", [4] = "SHIRTSLOT", [5] = "CHESTSLOT", [6] = "WAISTSLOT",
 	[7] = "LEGSSLOT", [8] = "FEETSLOT", [9] = "WRISTSLOT", [10] = "HANDSSLOT", [11] = "FINGER0SLOT", [12] = "FINGER1SLOT",
 	[13] = "TRINKET0SLOT", [14] = "TRINKET1SLOT", [15] = "BACKSLOT", [16] = "MAINHANDSLOT", [17] = "SECONDARYHANDSLOT",
 	[18] = "RANGEDSLOT", [19] = "TABARDSLOT" }
+ns.SLOT_KEYS = SLOT_WORDS -- (the character sheet: the game's empty pictures)
 function ns.SlotName(slot)
 	local word = SLOT_WORDS[slot] and _G[SLOT_WORDS[slot]]
 	return type(word) == "string" and word ~= "" and word or nil
