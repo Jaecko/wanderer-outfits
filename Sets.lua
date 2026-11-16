@@ -363,6 +363,11 @@ function ns.SaveSet(name)
 		if api.ClearIgnoredSlotsForSave then Safe(api.ClearIgnoredSlotsForSave) end
 		for _, set in ipairs(ns.Sets()) do
 			if set.name == name then
+				-- (the places this outfit leaves alone, as set in the game's manager, stay left alone: the game's way)
+				local ignored = api.GetIgnoredSlots and api.IgnoreSlotForSave and Safe(api.GetIgnoredSlots, set.id)
+				for slot, skip in pairs(type(ignored) == "table" and ignored or {}) do
+					if Clean(skip) then Safe(api.IgnoreSlotForSave, slot) end
+				end
 				Safe(api.SaveEquipmentSet, set.id)
 				return true
 			end
