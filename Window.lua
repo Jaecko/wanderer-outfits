@@ -24,6 +24,7 @@ local WHEN_WIDTH, WHEN_BUTTON = 266, 22
 local ICON_CHOICE = 28
 local POLE_ICON = "Interface\\Icons\\INV_Fishingpole_02"
 local RENAME_ICON = "Interface\\Buttons\\UI-GuildButton-PublicNote-Up"
+local NAME_MOST = 16 -- (the game's own outfit names take no more: a longer one would be refused)
 local BANKER = "Interface\\Minimap\\Tracking\\Banker"
 
 local window, list, pole
@@ -72,7 +73,7 @@ function ns.AskSaveName(onMade)
 		while used[L.PAD_NAME:format(number)] do number = number + 1 end
 		name = L.PAD_NAME:format(number)
 	end
-	Skin.AskText(L.NAME_PROMPT, name, function(typed) ns.AskSave(typed, onMade) end, 30)
+	Skin.AskText(L.NAME_PROMPT, name, function(typed) ns.AskSave(typed, onMade) end, NAME_MOST)
 end
 
 -- An outfit's card opened beside its row (the window opened first): just made, its pieces to choose, its moment.
@@ -213,7 +214,7 @@ end
 local function MakeRename()
 	renameBox = CreateFrame("Frame", nil, card)
 	renameBox:SetSize(266, 24)
-	renameBox.input = Skin.CreateInput(renameBox, "WandererOutfitsRename", 30, {
+	renameBox.input = Skin.CreateInput(renameBox, "WandererOutfitsRename", NAME_MOST, {
 		hint = L.NAME_PROMPT,
 		onEnter = function(input)
 			local entry = card.entry
