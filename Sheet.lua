@@ -489,9 +489,16 @@ local function MakeSlot(parent, slot, side, width)
 	end
 	-- (under the mouse: the square lights a little, the band deepens; no box drawn over your character)
 	row.hover = row.icon:CreateTexture(nil, "OVERLAY")
-	row.hover:SetPoint("TOPLEFT", row.icon, "TOPLEFT", 1, -1)
-	row.hover:SetPoint("BOTTOMRIGHT", row.icon, "BOTTOMRIGHT", -1, 1)
-	row.hover:SetColorTexture(1, 1, 1, 0.12)
+	if Skin.GameWindows() then
+		-- (the game look: the light of the game's own item squares)
+		row.hover:SetAllPoints(row.icon)
+		row.hover:SetTexture("Interface\\Buttons\\ButtonHilight-Square")
+		row.hover:SetBlendMode("ADD")
+	else
+		row.hover:SetPoint("TOPLEFT", row.icon, "TOPLEFT", 1, -1)
+		row.hover:SetPoint("BOTTOMRIGHT", row.icon, "BOTTOMRIGHT", -1, 1)
+		row.hover:SetColorTexture(1, 1, 1, 0.12)
+	end
 	row.hover:Hide()
 	row:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 	row:RegisterForDrag("LeftButton")
@@ -711,6 +718,27 @@ end
 
 -- Pages beside ---------------------------------------------------------------------------------------------------
 
+-- The game look: a characteristic's row as the game's sheet draws it (its group's title on the game's bar, in
+-- white as written; every other line of a group on the game's line ground). even: the line's place in its group.
+local function GameStatRow(row, entry, even)
+	if not row.gameBack then
+		row.gameBack = row:CreateTexture(nil, "BACKGROUND", nil, -1)
+		row.gameBack:SetAllPoints()
+		if type(row.header) == "table" and row.header.SetFontObject then row.header:SetFontObject(Skin.FontFor("GameFontHighlight")) end
+	end
+	row.gameBack:Hide()
+	if not entry then return end
+	if entry.header then
+		if Skin.GameAtlas(row.gameBack, "UI-Character-Info-Title") then row.gameBack:Show() end
+		row.header:SetText(entry.header)
+		row.header:SetTextColor(Skin.RGB("text"))
+		row.header:ClearAllPoints()
+		row.header:SetPoint("CENTER", row, "CENTER", 0, 0)
+	elseif even and Skin.GameAtlas(row.gameBack, "UI-Character-Info-Line-Bounce") then
+		row.gameBack:Show()
+	end
+end
+
 local function DrawStats()
 	local page = pages.stats
 	if not (page and page:IsShown()) then return end
@@ -718,6 +746,16 @@ local function DrawStats()
 	if not Fighting() or not stats then stats = ns.ReadStats() end
 	local list = page.list
 	local offset = list:Clamp(#stats)
+	local game = Skin.GameWindows()
+	-- (the game look: each line's place in its group, for the game's ground on every other one)
+	local even = {}
+	if game then
+		local count = 0
+		for index, entry in ipairs(stats) do
+			if entry.header then count = 0 else count = count + 1 end
+			even[index] = count % 2 == 0
+		end
+	end
 	for index, row in ipairs(list.rows) do
 		local entry = stats[offset + index]
 		row:Fill(entry, false, entry and { value = entry.value } or nil)
@@ -726,6 +764,7 @@ local function DrawStats()
 			row.name:SetTextColor(c[1], c[2], c[3])
 			row.cells.value:SetTextColor(v[1], v[2], v[3])
 		end
+		if game then GameStatRow(row, entry, even[offset + index]) end
 	end
 	page.note:SetShown(Fighting())
 end
@@ -1046,7 +1085,10 @@ function ns.CreateSheet()
 	window.game = Skin.SmallButton(window, Skin.GlyphText("move", "label") .. " " .. L.GAME_WINDOW, function() ns.SheetUseGame() end,
 		L.SHEET_GAME_DESC, 20)
 	window.game:SetPoint("RIGHT", help or window.cog or window.closeButton, "LEFT", -8, 0)
+	local game = Skin.GameWindows()
 	local rule = Skin.Rule(window, false, 0.16)
+	-- (the game look: the game's own divider, from its options' list)
+	if game then Skin.GameAtlas(rule, "Options_HorizontalDivider") end
 	rule:SetPoint("TOPLEFT", window, "TOPLEFT", margin, -(margin + 66))
 	rule:SetPoint("TOPRIGHT", window, "TOPRIGHT", -margin, -(margin + 66))
 	-- The pieces and your character.
@@ -1082,6 +1124,11 @@ function ns.CreateSheet()
 	Skin.FadingRule(glowLeft, LIGHT, true, Skin.COLORS.kicker)
 	local glowRight = Ground(2, middle, half)
 	Skin.FadingRule(glowRight, LIGHT, false, Skin.COLORS.kicker)
+	-- (the game look: no warm light of Wanderer's own behind your character, as the game's sheet)
+	if game then
+		glowLeft:Hide()
+		glowRight:Hide()
+	end
 	local floor = window:CreateTexture(nil, "BACKGROUND", nil, 3)
 	floor:SetPoint("BOTTOMLEFT", stage, "BOTTOMLEFT", COLUMN - 40, -8)
 	floor:SetPoint("BOTTOMRIGHT", stage, "BOTTOMRIGHT", -(COLUMN - 40), -8)
@@ -1113,6 +1160,7 @@ function ns.CreateSheet()
 	down:SetPoint("TOPRIGHT", side, "TOPLEFT", -12, 26)
 	down:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", -(margin + SIDE + 12), margin)
 	local tabRule = Skin.Rule(window, false, 0.16)
+	if game then Skin.GameAtlas(tabRule, "Options_HorizontalDivider") end
 	tabRule:SetPoint("BOTTOMLEFT", side, "TOPLEFT", 0, 8)
 	tabRule:SetPoint("BOTTOMRIGHT", side, "TOPRIGHT", 0, 8)
 	window.tabs = Skin.Tabs(window, { { "stats", L.TAB_STATS }, { "outfits", L.TITLE }, { "titles", L.TAB_TITLES } }, ShowPage)
