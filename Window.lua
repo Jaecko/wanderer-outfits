@@ -556,7 +556,11 @@ local function Create()
 		end,
 		onDraw = Draw,
 	})
-	list:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -12)
+	-- (the game look: the heading in the game's bar, the list right under the cog and the help)
+	local game = Skin.GameWindows and Skin.GameWindows()
+	local top = game and 30 or margin + 30 + 12
+	if game then list:SetPoint("TOPLEFT", window, "TOPLEFT", margin, -top)
+	else list:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -12) end
 	list.empty:SetText(L.EMPTY)
 	window.where = Skin.Text(window, "GameTooltipTextSmall", "muted")
 	window.where:SetPoint("TOPLEFT", list, "BOTTOMLEFT", 0, -6)
@@ -579,7 +583,7 @@ local function Create()
 	local help = Skin.Help(window, L.HELP_TIP, "HEADING")
 	-- (with a controller: its own words, its buttons instead of the mouse's)
 	if help then help:HookScript("OnEnter", function(self) if U.UsingPad and U.UsingPad() then Skin.ShowTip(self, L.HELP_TIP_PAD, "ANCHOR_BOTTOM") end end) end
-	window:SetSize(WIDTH, margin * 2 + 30 + 12 + list:GetHeight() + 6 + 28 + 12 + 36)
+	window:SetSize(WIDTH, top + margin + list:GetHeight() + 6 + 28 + 12 + 36)
 	window:SetScript("OnKeyDown", OnKey)
 	window:SetScript("OnEvent", function(_, event) Keys(event == "PLAYER_REGEN_ENABLED") end)
 	window:HookScript("OnShow", function(self)

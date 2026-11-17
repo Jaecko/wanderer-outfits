@@ -29,6 +29,7 @@ local SIDE = 280 -- the pages beside
 local COLUMN = 236 -- a column of pieces
 local SQUARE, SLOT_ROW, SLOT_GAP = 42, 50, 4
 local TOP = 112 -- (under the heading and the tabs)
+local GAME_TOP, GAME_RULE = 54, 7 -- (the game look: the heading in the game's bar, a line of its actions, the rule, the tabs)
 local HANDS_GAP = 16
 local ZOOM_LEAST, ZOOM_MOST, ZOOM_STEP = 0.8, 1.2, 0.08 -- (a little closer or further, never a close-up)
 local TURN_STEP = 0.25 -- (a controller's cross, per press)
@@ -1053,11 +1054,16 @@ function ns.CreateSheet()
 	-- (opened silently by the character key, yet by the player: the controller comes to it, Wanderer's Pad.lua)
 	window.padTakes = true
 	Skin.Dress(window, { "CENTER", UIParent, "CENTER", 0, 30 }, "outfitsSheetPos")
-	window:SetSize(WIDTH, HEIGHT)
+	-- (the game look: the heading in the game's bar, so all under it comes up, and the window as much shorter)
+	local game = Skin.GameWindows()
+	local top, ruleTop = game and GAME_TOP or TOP, game and GAME_RULE or 66
+	window:SetSize(WIDTH, HEIGHT - (TOP - top))
 	local kicker, title, margin = Skin.Header(window, "Wanderer", "", { settings = "ext:outfits" }, "GameFontNormalHuge")
 	window.kicker, window.title, window.margin = kicker, title, margin
 	window.who = Skin.Text(window, "GameTooltipText", "soft")
-	window.who:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -5)
+	-- (the game look: the title's place, level with the cog and the help)
+	if game then window.who:SetPoint("LEFT", window, "TOPLEFT", margin, -14)
+	else window.who:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -5) end
 	-- Your item level, at the heading's right: the game's own words under the mouse.
 	local level = CreateFrame("Frame", nil, window)
 	level:SetSize(150, 44)
@@ -1085,16 +1091,25 @@ function ns.CreateSheet()
 	window.game = Skin.SmallButton(window, Skin.GlyphText("move", "label") .. " " .. L.GAME_WINDOW, function() ns.SheetUseGame() end,
 		L.SHEET_GAME_DESC, 20)
 	window.game:SetPoint("RIGHT", help or window.cog or window.closeButton, "LEFT", -8, 0)
-	local game = Skin.GameWindows()
+	-- (the game look: the item level on the heading's line too, left of that button, its words before the number)
+	if game then
+		level:ClearAllPoints()
+		level:SetSize(150, 24)
+		level:SetPoint("RIGHT", window.game, "LEFT", -16, 0)
+		level.number:ClearAllPoints()
+		level.number:SetPoint("RIGHT", level, "RIGHT", 0, 0)
+		level.caps:ClearAllPoints()
+		level.caps:SetPoint("RIGHT", level.number, "LEFT", -6, 0)
+	end
 	local rule = Skin.Rule(window, false, 0.16)
 	-- (the game look: the game's own divider, from its options' list)
 	if game then Skin.GameAtlas(rule, "Options_HorizontalDivider") end
-	rule:SetPoint("TOPLEFT", window, "TOPLEFT", margin, -(margin + 66))
-	rule:SetPoint("TOPRIGHT", window, "TOPRIGHT", -margin, -(margin + 66))
+	rule:SetPoint("TOPLEFT", window, "TOPLEFT", margin, -(margin + ruleTop))
+	rule:SetPoint("TOPRIGHT", window, "TOPRIGHT", -margin, -(margin + ruleTop))
 	-- The pieces and your character.
 	local area = WIDTH - margin * 2 - SIDE - 24
 	local stage = CreateFrame("Frame", nil, window)
-	stage:SetPoint("TOPLEFT", window, "TOPLEFT", margin, -(margin + TOP))
+	stage:SetPoint("TOPLEFT", window, "TOPLEFT", margin, -(margin + top))
 	stage:SetSize(area, 8 * SLOT_ROW + 7 * SLOT_GAP)
 	window.stage = stage
 	for index, slot in ipairs(LEFT_SLOTS) do
@@ -1110,7 +1125,7 @@ function ns.CreateSheet()
 	-- left)
 	local function Ground(sub, x, width)
 		local texture = window:CreateTexture(nil, "BACKGROUND", nil, sub)
-		texture:SetPoint("TOPLEFT", window, "TOPLEFT", x, -(margin + 67))
+		texture:SetPoint("TOPLEFT", window, "TOPLEFT", x, -(margin + ruleTop + 1))
 		texture:SetPoint("BOTTOMLEFT", window, "BOTTOMLEFT", x, 1)
 		texture:SetWidth(width)
 		return texture
@@ -1152,7 +1167,7 @@ function ns.CreateSheet()
 	end
 	-- The pages beside, under their tabs, past a thin rule.
 	local side = CreateFrame("Frame", nil, window)
-	side:SetPoint("TOPRIGHT", window, "TOPRIGHT", -margin, -(margin + TOP))
+	side:SetPoint("TOPRIGHT", window, "TOPRIGHT", -margin, -(margin + top))
 	side:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", -margin, margin)
 	side:SetWidth(SIDE)
 	window.side = side
@@ -1166,7 +1181,7 @@ function ns.CreateSheet()
 	window.tabs = Skin.Tabs(window, { { "stats", L.TAB_STATS }, { "outfits", L.TITLE }, { "titles", L.TAB_TITLES } }, ShowPage)
 	window.tabs.fit = SIDE
 	window.tabs:SetPoint("BOTTOMLEFT", tabRule, "TOPLEFT", 0, 0)
-	local height = HEIGHT - margin * 2 - TOP
+	local height = HEIGHT - margin * 2 - TOP -- (the same in both looks: the window as much shorter as its top)
 	local statsPage = MakePage("stats", { width = SIDE, rows = 30, rowHeight = 22, titles = false, icon = false,
 		columns = { { key = "value", width = 96, justify = "RIGHT" } }, onClick = function() end, onDraw = DrawStats })
 	statsPage.list:Fit(height - 18)
