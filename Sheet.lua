@@ -954,11 +954,19 @@ ns.SheetSync = Sync
 local function Reopen()
 	local sheet = Game()
 	if reopen or not sheet then return end
-	reopen = Skin.SmallButton(UIParent, Skin.GlyphText("chevron", "label") .. " " .. L.SHEET_LINK, function() ns.SheetUseWanderer() end,
+	-- (held by a frame of its own, a side window for the controller: the triggers reach it from the game's sheet)
+	local holder = CreateFrame("Frame", nil, UIParent)
+	holder:SetFrameStrata("HIGH")
+	holder:SetPoint("BOTTOMRIGHT", sheet, "TOPRIGHT", 0, 4)
+	local button = Skin.SmallButton(holder, Skin.GlyphText("chevron", "label") .. " " .. L.SHEET_LINK, function() ns.SheetUseWanderer() end,
 		L.SHEET_LINK_DESC)
-	reopen:SetFrameStrata("HIGH")
-	reopen:SetPoint("BOTTOMRIGHT", sheet, "TOPRIGHT", 0, 4)
-	reopen:Hide()
+	button:SetPoint("BOTTOMRIGHT")
+	holder:SetSize(button:GetSize())
+	button:HookScript("OnSizeChanged", function(self) holder:SetSize(self:GetSize()) end)
+	holder:Hide()
+	reopen = holder
+	-- (anySize: the button fills its holder and is still a button, never its background)
+	if Skin.PadWindow then Skin.PadWindow(holder, { side = true, anySize = true }) end
 end
 
 local function Hook()
